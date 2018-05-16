@@ -75,7 +75,7 @@ class LoadNetcdf():
 
 
 ####test
-
+"""
 filenc="/media/darwin/Darwin/Mensuales/Prec/RCP45/pr_day_Ecuador_Ensamble_rcp45_2011.nc"
 
 tcn=LoadNetcdf(filenc)
@@ -84,3 +84,4 @@ tcn=LoadNetcdf(filenc)
 tcn.creaTrim('precip').to_csv("~/Escritorio/trimestre.csv",sep=";",index=False)
 
 
+"""
