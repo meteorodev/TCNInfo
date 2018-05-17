@@ -43,30 +43,35 @@ class LoadNetcdf():
 
         return datadf
 
-    def creaTrim(self,ncvar):
+    def creaTrim(self,ncvar,funcion):
         """crea datos trimestrales 4 trimestres de enero a diciembre EFM, AMJ, OND"""
         datanc = nc(self.ncfile)
         dataset = datanc.variables[ncvar][:]
         lon = datanc.variables['lon'][:]
         lat = datanc.variables['lat'][:]
-        head = ["lat", "lon","ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic","EFM", "AMJ", "JAS", "OND"]
+        head = ["lat", "lon","EFM", "AMJ", "JAS", "OND"]
         rows = []
-        print(np.shape(dataset))
+        #print(np.shape(dataset))
         for i in range(0, len(lat)):  # recorre las latitudes
             for j in range(0, len(lon)):  # recorre las longitudes
                 #row = [lat[i],lon[j],sum(dataset[0:3, i, j])]
                 row = []
                 row.extend([lat[i]])
                 row.extend([lon[j]])
-                row.extend(dataset[:, i, j])
-                row.extend([sum(dataset[0:3, i, j])])
-                row.extend([sum(dataset[3:6, i, j])])
-                row.extend([sum(dataset[6:9, i, j])])
-                row.extend([sum(dataset[9:12, i, j])])
+                if(funcion==1):
+                    row.extend([sum(dataset[0:3, i, j])])
+                    row.extend([sum(dataset[3:6, i, j])])
+                    row.extend([sum(dataset[6:9, i, j])])
+                    row.extend([sum(dataset[9:12, i, j])])
+                else:
+                    row.extend([np.mean(dataset[0:3, i, j])])
+                    row.extend([np.mean(dataset[3:6, i, j])])
+                    row.extend([np.mean(dataset[6:9, i, j])])
+                    row.extend([np.mean(dataset[9:12, i, j])])
                 rows.append(row)
 
         datadf = pd.DataFrame(rows, columns=head)
-        print(datadf)
+        #print(datadf)
 
         datanc.close()
 
